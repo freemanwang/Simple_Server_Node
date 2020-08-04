@@ -13,13 +13,12 @@ const getMime = require('./module/mime').getMime
 
 http.createServer(function (request, response) {
     let reqUrl = url.parse(request.url).pathname // 避免了GET传参导致reqUrl带了参数找不到资源
-    let extName = path.extname(reqUrl) // 后缀名，例如 '.html'   '.jpeg'
+    let fullPath = reqUrl === '/' ? '/index.html' : reqUrl
+    let extName = path.extname(fullPath) // 后缀名，例如 '.html'   '.jpeg'
 
     if (reqUrl != '/favicon.ico') {
-        let fullPath = reqUrl === '/' ? '/index.html' : reqUrl
-        // let extName = path.extName(reqUrl) // 后缀名，例如 '.html'   '.jpeg'
-
-        fullPath = './static' + reqUrl
+        console.log(`本地访问的目录为: ${fullPath}`);
+        fullPath = './static' + fullPath
         fs.readFile(fullPath, (err, data) => {
             if (err) {
                 console.log(404, err);
